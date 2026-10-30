@@ -1,125 +1,121 @@
-[![Release](https://img.shields.io/github/v/release/KernelSU-Modules-Repo/asl?label=release&color=blue&style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases) [![License](https://img.shields.io/github/license/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/blob/main/LICENSE) [![Last commit](https://img.shields.io/github/last-commit/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/commits/main) [![Issues](https://img.shields.io/github/issues/KernelSU-Modules-Repo/asl?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/issues)
+<div align="center">
+  <img src="icon.png" width="96" alt="AndroidSubSystem4Linux icon">
+  <h1>AndroidSubSystem4Linux</h1>
+  <p><strong>Run a compact GNU/Linux userspace on rooted Android with Rurima.</strong></p>
+  <p>Termux-backed runtime · KAM build system · arm64 Android</p>
 
-[![Stars](https://img.shields.io/github/stars/KernelSU-Modules-Repo/asl?style=social)](https://github.com/KernelSU-Modules-Repo/asl/stargazers) [![Downloads](https://img.shields.io/github/downloads/KernelSU-Modules-Repo/asl/total?style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases) [![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-brightgreen?style=flat-square)](https://github.com/sponsors/LIghtJUNction)
+  [![License](https://img.shields.io/github/license/LIghtJUNction/asl-ksu?style=flat-square)](LICENSE)
+  [![Last commit](https://img.shields.io/github/last-commit/LIghtJUNction/asl-ksu?style=flat-square)](https://github.com/LIghtJUNction/asl-ksu/commits/main)
+  [![Stars](https://img.shields.io/github/stars/LIghtJUNction/asl-ksu?style=flat-square)](https://github.com/LIghtJUNction/asl-ksu/stargazers)
+  [![Releases](https://img.shields.io/github/v/release/KernelSU-Modules-Repo/asl?label=release&style=flat-square)](https://github.com/KernelSU-Modules-Repo/asl/releases)
+</div>
 
----
-# ![Screenshot](Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg)
+<p align="center">
+  <a href="#install">Install</a> ·
+  <a href="#first-linux-environment">First environment</a> ·
+  <a href="#build-from-source">Build</a> ·
+  <a href="#project-layout">Internals</a>
+</p>
 
----
-# Note
-- 出于简洁性考虑，最新版本已经不再内置zsh zim框架 并强制依赖于termux
-- 你可以下载旧版，旧版使用zsh，新版仅包含rurima/ruri
----
-How to build & install？ / 如何下载 & 安装？
-============================================
-- Termux :
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/KernelSU-Modules-Repo/asl.git
-   ```
+<p align="center">
+  <img src="Screenshot_2025-12-08-01-18-25-97_84d3000e3f4017145260f7618db1d683.jpg" width="760" alt="AndroidSubSystem4Linux running on Android">
+</p>
 
-2. Navigate to the cloned directory:
-   ```bash
-   cd asl
-   ```
+## What this is
 
-3. Build the module:
-   ```bash
-   kam build
-   ```
+AndroidSubSystem4Linux is a small root module that makes a Rurima-based Linux userspace practical on Android. The current line deliberately keeps the module small by relying on Termux instead of bundling a shell framework and a large runtime.
 
-4. Install the module:
-   ```bash
-   kam install
-   ```
+In plain terms, the module supplies the Android-side integration; Termux supplies the userland tools; Rurima creates and enters the Linux filesystem.
 
-> Kam(v0.5.17+)：
-   ```bash
-   kam install KernelSU-Modules-Repo/asl
-   ```
+Current releases:
 
-What is this? / 这是干什么的？
-============================================
+- include Rurima/Ruri integration;
+- require Termux;
+- no longer bundle Zsh or the Zim framework;
+- keep older, larger builds available in the release history.
 
-这是一个来自 asl 的 fork（实际上改的不像样子了，逻辑上比原模块简单~~不少~~，体积大幅减少，因为依赖了termux）
-                            — 文档聚焦于 Kam 的构建钩子系统（hooks）。  
+This repository contains the maintained source. Signed installable packages are published through the canonical [`KernelSU-Modules-Repo/asl`](https://github.com/KernelSU-Modules-Repo/asl) release channel.
 
-This is a fork from asl (actually quite different from the original, logically much simpler than the original module, and significantly smaller in size, because it depends on termux) — the documentation focuses on Kam's build hook system.  
+## Compatibility
 
----
-Cyber Amber | 赛博琥珀(🤔
-- This module is from the official kernel-su module repository and is the first project to use developer private keys for automated signing.
+| Requirement | Current contract |
+| --- | --- |
+| Architecture | `arm64-v8a` |
+| Android API | 21–35 |
+| Root environment | A root-capable Android setup able to install the module |
+| Runtime dependency | Termux |
+| Build/install tool | KAM 0.5.17 or newer |
 
-- In addition to automated signing, there's also automated changelog updates, automated version number updates, automated Rurima dependency updates, automated Zim module updates, and even interactive installation to the device after packaging (I haven't added this hook script yet, but it'll be soon).
+## Install
 
+### Install a published build
 
-- What is a developer's private key?
-Developer private key obtained from the developers repository
+Download the latest package from the [canonical releases page](https://github.com/KernelSU-Modules-Repo/asl/releases), or install it with KAM:
 
-- Release attestation
-(json) As long as immutable publishing is enabled, there will be
+```bash
+kam install KernelSU-Modules-Repo/asl
+```
 
-- Developer private key signing, automated signing by KAM.
+Install Termux before using Rurima. The module intentionally does not duplicate the tools already supplied by Termux.
 
-- The signature file has the .sig extension and can be verified with my public key.
+### First Linux environment
 
+The following example creates an Alpine Edge filesystem under `/data/asl`:
 
-Quick start / 快速开始
---------------------------------------------
+```bash
+su
+rurima dep
+mkdir -p /data/asl
+cd /data/asl
+rurima pull alpine:edge ./alpine
+rurima r ./alpine
+```
 
-### Download & install / 下载与安装
-- Download releases: https://github.com/KernelSU-Modules-Repo/asl/releases  
+Image names are available from [Linux Containers images](https://images.linuxcontainers.org/).
 
-- download termux
+If the environment starts but has no network access, recreate or edit its `/etc/resolv.conf` and add a reachable DNS resolver. This is a filesystem configuration issue inside the pulled environment, not a reason to reinstall the Android module.
 
-- su
+## Build from source
 
-- rurima
+```bash
+git clone https://github.com/LIghtJUNction/asl-ksu.git
+cd asl-ksu
+kam build
+```
 
-- rurima dep # check dependencies
+The package is written to the configured `dist/` output directory. To build and install on the connected device in one flow:
 
-- rurima pull # pull image
+```bash
+kam install
+```
 
-example
+Do not commit signing keys. CI signing expects the private key through the `KAM_PRIVATE_KEY` repository secret.
 
-- cd /data
+## Project layout
 
-- mkdir asl && cd asl
+```text
+kam.toml       Module metadata and KAM build contract
+hooks/         Pre-build and post-build automation
+crates/        Native/Rust components
+kam.sh         Project-specific build entry
+module.prop    Android module metadata
+```
 
-- https://images.linuxcontainers.org/
+KAM hooks are ordinary scripts executed at defined build stages. They are used here for repeatable packaging, metadata updates, dependency synchronization and release signing rather than hiding those steps inside an opaque build service.
 
-- rurima pull alpine:edge ./alpine
+## Removal note
 
-- rurima r ./alpine
+A pulled Rurima environment may mark `.rurienv` immutable. Remove that attribute before deleting the filesystem:
 
-- note!
+```bash
+chattr -i /data/asl/alpine/.rurienv
+rm -rf /data/asl/alpine
+```
 
-- modify /etc/resolv.conf
-(To remove old files and create new ones, you can use MT Manager or other tools, or you can do it via the command line.)
-- Write some DNS server configuration
+Adjust the path to match the environment you created.
 
-- You will now be able to access the internet.
+## Origin and license
 
-- How do I uninstall it?
+This project originated from [`RuriOSS/asl`](https://github.com/RuriOSS/asl) and now uses a substantially smaller, Termux-dependent design. Preserve upstream attribution when redistributing modified builds.
 
-- ./alpine/.rurienv It has been set to an unmodifiable attribute; remove it using `chattr -i ./alpine/.rurienv`.
-
-
---------------------------------------------
-
-### Action secrets / GitHub Actions（CI）
-- `KAM_PRIVATE_KEY`: Add this secret (PEM content) to your repository to enable CI signing.
-- Keep secrets secure — do not commit private keys to the repository.
-
-Overview / 概述
---------------------------------------------
-Kam hooks let you run custom scripts at different stages of the build lifecycle. Hooks are small scripts placed under `hooks/pre-build/` or `hooks/post-build/` and executed via `kam build`.
-
-Kam 钩子允许你在构建流程不同阶段运行自定义脚本（`hooks/pre-build/`, `hooks/post-build/`），便于在构建前后进行同步、签名、上传等操作。
-}
-
-Licensing / 许可与引用
---------------------------------------------
-This project is a fork of [asl](https://github.com/RuriOSS/asl). Keep attributions and follow the original license (see `LICENSE`).
-
----
+Released under the [MIT License](LICENSE).
